@@ -1,12 +1,14 @@
 import { Paint } from "./Paint";
 import { Rect } from './Figure';
+import { Creator, CreatorRect } from "./Creator";
 document.body.innerHTML = `
   <div class="paint">
   <div class="containerMenu"></div>
   <canvas width="500" height="500"><canvas>
   </div>`;
 
-let paint = new Paint(document.querySelector('.paint'));
+export let paint = new Paint(document.querySelector('.paint'));
+export let canvas = document.querySelector('canvas');
 
 paint.createButton({
   title: "Select",
@@ -21,9 +23,8 @@ paint.createButton({
   onClick: function (e: any) {
     paint.canvas.onmousedown = null;
     paint.canvas.onclick = function (e:any) {
-      let rect = new Rect(paint.canvas);
-      rect.draw(e.pageX, e.pageY);
-      paint.listFigure.push(rect);
+      let creator = new CreatorRect(e.pageX, e.pageY)
+      paint.listFigure.push(creator.init())
     }
   }
 })
