@@ -15,11 +15,13 @@ abstract class DecoratorFigure extends Figure {
 
 export class DecoratorPaint extends Paint {
   protected paint: Paint;
+  private selectedFigure: any;
 
   constructor(paint: Paint) {
     super(paint.container);
     this.paint = paint;
     this.buttons = paint.buttons;
+    this.selectedFigure = null;
   }
 
   public initDrag() {
@@ -36,24 +38,37 @@ export class DecoratorPaint extends Paint {
     this.listFigure = this.paint.listFigure;
   }
 
+  public redrawFigure() {
+    this.paint.redrawFigure();
+  }
+
   private initDecorator(e: any) {
-    let figure = this.searchFigure(e.pageX, e.pageY);
-    if (figure) figure = new DecoratorRect(figure);
+    this.selectedFigure = this.searchFigure(e.pageX, e.pageY);
+    if (this.selectedFigure) {
+      this.selectedFigure = new DecoratorRect(this.selectedFigure);
+      this.figureAdd(this.selectedFigure);
+    } else {
+      this.redrawFigure();
+    }
   }
 }
 
 export class DecoratorRect extends DecoratorFigure {
   constructor(figure: Figure) {
-    super(figure) 
+    super(figure)
+    this.x = figure.x;
+    this.y = figure.y;
+    this.width = figure.width;
+    this.height = figure.height;
+    this.colorFill = figure.colorFill;
     this.figure = figure;
     this.init();
   }
   
   private init() {
     console.log("init decorator")
-    this.drawStroke();
+    // this.drawStroke();
     this.drawCircleResize();
-
   }
 
   private drawStroke() {

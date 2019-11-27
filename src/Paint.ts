@@ -43,8 +43,9 @@ export class Paint {
 
   public searchFigure(x: any, y: any): any {
     let figure = null;
-    // debugger
     let points = getPointsCanvas(x, y, this.canvas)
+
+    // console.log(this.listFigure);
     
     let index = this.listFigure.findIndex(item => {
       return (points.x >= item.x && points.x <= item.x + item.width && points.y >= item.y && points.y <= item.y + item.height)
@@ -64,25 +65,34 @@ export class Paint {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
+  public redrawFigure() {
+    this.clearCanvas();
+
+    this.listFigure.forEach(item => {
+      item.redraw();
+    });
+  }
+
   public initDrag() {
     this.canvas.onmousedown = startDrag;
     let elemDrag: any = null,
         self = this;
     function startDrag(evt: MouseEvent): void{
+      console.log("start drag")
+
+      
       elemDrag = self.searchFigure(evt.pageX, evt.pageY);
+      console.log(elemDrag);
       if(elemDrag) {
-        // elemDrag = new DecoratorRect(elemDrag);
         self.canvas.onmousemove = drag;
         self.canvas.onmouseup = endDrag;
         self.canvas.onmouseleave = endDrag;
       }
     }
     function drag(evt: MouseEvent): void {
-      self.clearCanvas();
+      console.log("drag");
 
-      self.listFigure.forEach(item => {
-        item.redraw();
-      });
+      self.redrawFigure();
 
       let points = getPointsCanvas(evt.pageX, evt.pageY, self.canvas)
       elemDrag.x = points.x;
@@ -91,8 +101,9 @@ export class Paint {
       elemDrag.redraw();
     }
     function endDrag(evt: MouseEvent  ): void {
-      // self.listFigure.push(elemDrag);
+      // debugger
       self.figureAdd(elemDrag);
+      console.log(self.listFigure)
       elemDrag = null;
       self.canvas.onmousemove = null;
       self.canvas.onmouseup = null;
