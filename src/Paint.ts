@@ -1,4 +1,4 @@
-import { getMousePosition } from "./assets/js/libs";
+import { getPointsCanvas } from './assets/js/libs'
 import { Button } from "./Button";
 import { removeAllListeners } from "./assets/js/libs";
 import { Figure } from "./Figure";
@@ -38,5 +38,59 @@ export class Paint {
     this.buttons.forEach((item: any)=>{
       item.disactive();
     })
+  }
+
+  private searchFigure(x: any, y: any): any {
+    let figure = null;
+    // debugger
+    let points = getPointsCanvas(x, y, this.canvas)
+    
+    let index = this.listFigure.findIndex(item => {
+      return (points.x >= item.x && points.x <= item.x + item.width && points.y >= item.y && points.y <= item.y + item.height)
+    })
+    if (index != -1) {
+      figure = this.listFigure.slice(0)[index];
+      this.listFigure.splice(index,1);
+      return figure;
+    }
+  }
+
+  private clearCanvas(): void {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  public initDrag() {
+    this.canvas.onmousedown = startDrag;
+    let elemDrag: any = null,
+        self = this;
+    function startDrag(evt: MouseEvent): void{
+      
+      elemDrag = self.searchFigure(evt.pageX, evt.pageY);
+      if(elemDrag) {
+        self.canvas.onmousemove = drag;
+        self.canvas.onmouseup = endDrag;
+        self.canvas.onmouseleave = endDrag;
+      }
+    }
+    function drag(evt: MouseEvent): void {
+      self.clearCanvas();
+
+      self.listFigure.forEach(item => {
+        item.redraw();
+      });
+
+      let points = getPointsCanvas(evt.pageX, evt.pageY, self.canvas)
+      elemDrag.x = points.x;
+      elemDrag.y = points.y;
+
+      elemDrag.redraw();
+    }
+    function endDrag(evt: MouseEvent  ): void {
+      self.listFigure.push(elemDrag);
+      elemDrag = null;
+      self.canvas.onmousemove = null;
+      self.canvas.onmouseup = null;
+      self.canvas.onmouseleave = null;
+    }
   }
 }

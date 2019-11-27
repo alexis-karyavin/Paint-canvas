@@ -9,3 +9,10 @@ export let getMousePosition = (x: number, y: number, svg: any): any => {
     y: (y - CTM.f) / CTM.d
   };
 }
+
+export let getPointsCanvas = (x:any, y: any, canvas: any): any => {
+  return {
+    x: x - canvas.offsetLeft,
+    y: y - canvas.offsetTop
+  };
+}

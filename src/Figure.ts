@@ -1,10 +1,10 @@
  export abstract class Figure {
   protected ctx: any;
-  protected x: Number;
-  protected y :Number;
-  protected width: Number;
-  protected height: Number;
-  protected colorFill: String;
+  public x: any;
+  public y :any;
+  public width: any;
+  public height: any;
+  public colorFill: String;
 
   protected canvas: any;
   constructor(canvas: any) {
@@ -16,6 +16,11 @@
     this.y = 0;
     this.colorFill = '#'+Math.round(0xffffff * Math.random()).toString(16);
   }
+
+  public redraw() {
+    this.ctx.fillStyle = this.colorFill;
+    this.ctx.fillRect(this.x, this.y, this.width, this.height);
+  }
 }
 
 export class Rect extends Figure {
@@ -24,13 +29,15 @@ export class Rect extends Figure {
     // this.init(canvas);
   }
 
-  public init(x: any, y: any) {
+  public draw(x: any, y: any) {
     // canvas.addEventListener('click', this.addRect.bind(this));
     this.x = x - this.canvas.offsetLeft,
     this.y = y - this.canvas.offsetTop;
     this.ctx.fillStyle = this.colorFill;
     this.ctx.fillRect(this.x, this.y, this.width, this.height);
   }
+
+  
 
   // private addRect(e: any) {
   //   console.log(e.pageX)
