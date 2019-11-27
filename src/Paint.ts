@@ -2,6 +2,7 @@ import { getPointsCanvas } from './assets/js/libs'
 import { Button } from "./Button";
 import { removeAllListeners } from "./assets/js/libs";
 import { Figure } from "./Figure";
+import { DecoratorRect } from './Decorator';
 
 export class Paint {
   public listFigure: Array<Figure>;
@@ -40,7 +41,7 @@ export class Paint {
     })
   }
 
-  private searchFigure(x: any, y: any): any {
+  public searchFigure(x: any, y: any): any {
     let figure = null;
     // debugger
     let points = getPointsCanvas(x, y, this.canvas)
@@ -55,6 +56,10 @@ export class Paint {
     }
   }
 
+  public figureAdd(figure: Figure) {
+    this.listFigure.push(figure);
+  }
+
   private clearCanvas(): void {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
@@ -64,9 +69,9 @@ export class Paint {
     let elemDrag: any = null,
         self = this;
     function startDrag(evt: MouseEvent): void{
-      
       elemDrag = self.searchFigure(evt.pageX, evt.pageY);
       if(elemDrag) {
+        // elemDrag = new DecoratorRect(elemDrag);
         self.canvas.onmousemove = drag;
         self.canvas.onmouseup = endDrag;
         self.canvas.onmouseleave = endDrag;
@@ -86,7 +91,8 @@ export class Paint {
       elemDrag.redraw();
     }
     function endDrag(evt: MouseEvent  ): void {
-      self.listFigure.push(elemDrag);
+      // self.listFigure.push(elemDrag);
+      self.figureAdd(elemDrag);
       elemDrag = null;
       self.canvas.onmousemove = null;
       self.canvas.onmouseup = null;

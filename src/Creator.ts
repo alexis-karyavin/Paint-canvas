@@ -18,7 +18,7 @@ export class CreatorRect extends Creator {
   constructor(x: any, y: any) {
     super(x, y);
     this.figure = new Rect(canvas);
-    let decorator = new DecoratorRect(this.figure);
+    // let decorator = new DecoratorRect(this.figure);
   }
   public init() {
     this.figure.draw(this.x, this.y);

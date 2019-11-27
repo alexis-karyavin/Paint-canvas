@@ -1,4 +1,4 @@
- export abstract class Figure {
+export abstract class Figure {
   protected ctx: any;
   public x: any;
   public y :any;

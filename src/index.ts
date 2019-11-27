@@ -1,6 +1,7 @@
 import { Paint } from "./Paint";
 import { Rect } from './Figure';
 import { Creator, CreatorRect } from "./Creator";
+import { DecoratorPaint } from "./Decorator";
 document.body.innerHTML = `
   <div class="paint">
   <div class="containerMenu"></div>
@@ -8,6 +9,7 @@ document.body.innerHTML = `
   </div>`;
 
 export let paint = new Paint(document.querySelector('.paint'));
+paint = new DecoratorPaint(paint);
 export let canvas = document.querySelector('canvas');
 
 paint.createButton({
@@ -24,7 +26,7 @@ paint.createButton({
     paint.canvas.onmousedown = null;
     paint.canvas.onclick = function (e:any) {
       let creator = new CreatorRect(e.pageX, e.pageY)
-      paint.listFigure.push(creator.init())
+      paint.figureAdd(creator.init());
     }
   }
 })
